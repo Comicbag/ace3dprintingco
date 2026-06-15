@@ -698,8 +698,13 @@
       let activeCat = '__all__';
       function applyFilter() {
         const q = (searchEl.value || '').trim().toLowerCase();
-        let list = activeCat === '__all__' ? products : products.filter(p => (p.category || 'Other') === activeCat);
-        if (q) list = list.filter(p => (p.name || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q));
+        let list;
+        if (q) {
+          // search is GLOBAL — finds matches across every category
+          list = products.filter(p => (p.name || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q));
+        } else {
+          list = activeCat === '__all__' ? products : products.filter(p => (p.category || 'Other') === activeCat);
+        }
         grid.innerHTML = list.length ? list.map(card).join('') : '<div class="catalog-noresults">No products match — try another category or search.</div>';
       }
       filterEl.addEventListener('click', e => {
