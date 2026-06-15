@@ -681,7 +681,7 @@
       }
 
       // catalog controls: search box + category filter (keeps ~270 products browsable)
-      const order = ['Sports Fan Gear','Personalized Keychains','Baby & Kids','NFC & QR Stands','Cars & Racing','Trophies & Awards','Personalized Gifts'];
+      const order = ['Sports Fan Gear','Personalized Keychains','Name Signs & Decor','Baby & Kids','NFC & QR Stands','Cars & Racing','Trophies & Awards','Personalized Gifts','Home & Organizers','Fun & Novelty'];
       const cats = {};
       products.forEach(p => { const c = p.category || 'Other'; cats[c] = (cats[c] || 0) + 1; });
       const catList = Object.keys(cats).sort((a, b) => { const ia = order.indexOf(a), ib = order.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
