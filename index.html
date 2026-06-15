@@ -403,6 +403,10 @@
   .cat-btn:hover { border-color: var(--ink); }
   .cat-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .cat-btn.active .cat-count { opacity: 0.65; }
+  .filter-group { display: flex; flex-direction: column; gap: 0.5rem; }
+  .filter-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
+  .clear-filters { align-self: flex-start; margin-top: 0.25rem; padding: 0.35rem 0.85rem; border: 1px solid var(--rule); background: none; color: var(--mute); font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; cursor: pointer; border-radius: 999px; }
+  .clear-filters:hover { border-color: var(--ink); color: var(--ink); }
   .catalog-noresults {
     padding: 2.5rem 0; color: var(--mute);
     font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em;
@@ -680,42 +684,53 @@
           </article>`;
       }
 
-      // catalog controls: search box + category filter (keeps ~270 products browsable)
-      const order = ['Sports Fan Gear','Personalized Keychains','Name Signs & Decor','Baby & Kids','NFC & QR Stands','Cars & Racing','Trophies & Awards','Personalized Gifts','Home & Organizers','Fun & Novelty'];
-      const cats = {};
-      products.forEach(p => { const c = p.category || 'Other'; cats[c] = (cats[c] || 0) + 1; });
-      const catList = Object.keys(cats).sort((a, b) => { const ia = order.indexOf(a), ib = order.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
-      const mkBtn = (label, val, count) => `<button class="cat-btn" data-cat="${escapeHtml(val)}">${escapeHtml(label)}<span class="cat-count">${count}</span></button>`;
+      // faceted browse: global search + multi-select tag groups (Type / Theme / Occasion).
+      // Selecting multiple tags AND-filters — e.g. Keychains + Sports = sports keychains.
+      const TAG_GROUPS = [
+        { label: 'Browse by type', tags: ['Keychains','Monograms','Name Signs','Frames & Wall Art','Lamps & Lights','Trophies & Awards','Jerseys','Piggy Banks','Organizers','Boxes & Containers','Puzzles','Cookie Cutters','Vases','Bookmarks','Fidgets','Charms & Tags','Toys & Games','Wall Art & Decor','NFC Stands','QR Stands'] },
+        { label: 'Browse by theme', tags: ['Sports','Soccer','Football','Basketball','Combat Sports','Cars & Racing','Pokémon','Kids & Baby','For Business'] },
+        { label: '🎁 Gifts & occasions', tags: ["Father's Day",'Graduation','New Baby','Nurse & Healthcare','Gifts for Kids','Personalized Gifts'] },
+      ];
+      const tagCount = {};
+      products.forEach(p => (p.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
+      const active = new Set();
       const controls = document.createElement('div');
       controls.className = 'catalog-controls';
-      controls.innerHTML =
-        '<input class="catalog-search" type="search" placeholder="Search products…" aria-label="Search products">' +
-        '<div class="cat-filter">' + mkBtn('All', '__all__', products.length) + catList.map(c => mkBtn(c, c, cats[c])).join('') + '</div>';
+      let html = '<input class="catalog-search" type="search" placeholder="Search all 300+ products…" aria-label="Search products">';
+      TAG_GROUPS.forEach(g => {
+        const avail = g.tags.filter(t => tagCount[t]);
+        if (!avail.length) return;
+        html += '<div class="filter-group"><span class="filter-label">' + g.label + '</span><div class="cat-filter">' +
+          avail.map(t => `<button class="cat-btn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}<span class="cat-count">${tagCount[t]}</span></button>`).join('') +
+          '</div></div>';
+      });
+      html += '<button class="clear-filters" type="button" hidden>✕ Clear filters</button>';
+      controls.innerHTML = html;
       grid.parentNode.insertBefore(controls, grid);
 
       const searchEl = controls.querySelector('.catalog-search');
-      const filterEl = controls.querySelector('.cat-filter');
-      let activeCat = '__all__';
+      const clearEl = controls.querySelector('.clear-filters');
       function applyFilter() {
         const q = (searchEl.value || '').trim().toLowerCase();
-        let list;
-        if (q) {
-          // search is GLOBAL — finds matches across every category
-          list = products.filter(p => (p.name || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q));
-        } else {
-          list = activeCat === '__all__' ? products : products.filter(p => (p.category || 'Other') === activeCat);
-        }
-        grid.innerHTML = list.length ? list.map(card).join('') : '<div class="catalog-noresults">No products match — try another category or search.</div>';
+        let list = products;
+        if (active.size) list = list.filter(p => { const ts = new Set(p.tags || []); for (const t of active) if (!ts.has(t)) return false; return true; });
+        if (q) list = list.filter(p => (p.name || '').toLowerCase().includes(q) || (p.tags || []).join(' ').toLowerCase().includes(q));
+        clearEl.hidden = active.size === 0 && !q;
+        grid.innerHTML = list.length ? list.map(card).join('') : '<div class="catalog-noresults">No products match — try fewer filters or a different search.</div>';
       }
-      filterEl.addEventListener('click', e => {
+      controls.addEventListener('click', e => {
         const b = e.target.closest('.cat-btn'); if (!b) return;
-        filterEl.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
-        b.classList.add('active');
-        activeCat = b.dataset.cat;
+        const t = b.dataset.tag;
+        if (active.has(t)) { active.delete(t); b.classList.remove('active'); }
+        else { active.add(t); b.classList.add('active'); }
+        applyFilter();
+      });
+      clearEl.addEventListener('click', () => {
+        active.clear(); searchEl.value = '';
+        controls.querySelectorAll('.cat-btn.active').forEach(x => x.classList.remove('active'));
         applyFilter();
       });
       searchEl.addEventListener('input', applyFilter);
-      filterEl.querySelector('.cat-btn').classList.add('active');
       applyFilter();
 
       if (meta) {
