@@ -280,7 +280,7 @@
   /* PRODUCTS */
   .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
     gap: 2rem;
   }
   .product-card {
@@ -379,6 +379,33 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
     color: var(--mute);
+  }
+
+  /* CATALOG CONTROLS (search + category filter) */
+  .catalog-controls { margin-bottom: 2.25rem; display: flex; flex-direction: column; gap: 1.25rem; }
+  .catalog-search {
+    width: 100%; max-width: 360px;
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--rule); background: var(--paper-warm); color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; letter-spacing: 0.04em;
+  }
+  .catalog-search::placeholder { color: var(--mute); letter-spacing: 0.08em; }
+  .catalog-search:focus { outline: none; border-color: var(--accent); }
+  .cat-filter { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .cat-btn {
+    padding: 0.4rem 0.95rem;
+    border: 1px solid var(--rule); border-radius: 999px;
+    background: none; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; letter-spacing: 0.06em;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .cat-btn .cat-count { opacity: 0.45; margin-left: 0.3rem; }
+  .cat-btn:hover { border-color: var(--ink); }
+  .cat-btn.active { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .cat-btn.active .cat-count { opacity: 0.65; }
+  .catalog-noresults {
+    padding: 2.5rem 0; color: var(--mute);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em;
   }
 
   /* REACH */
@@ -653,21 +680,38 @@
           </article>`;
       }
 
-      // category filter bar (keeps ~270 products browsable)
+      // catalog controls: search box + category filter (keeps ~270 products browsable)
       const order = ['Sports Fan Gear','Personalized Keychains','Baby & Kids','NFC & QR Stands','Cars & Racing','Trophies & Awards','Personalized Gifts'];
       const cats = {};
       products.forEach(p => { const c = p.category || 'Other'; cats[c] = (cats[c] || 0) + 1; });
       const catList = Object.keys(cats).sort((a, b) => { const ia = order.indexOf(a), ib = order.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
-      const bar = document.createElement('div');
-      bar.style.cssText = 'display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.75rem;';
-      const mkBtn = (label, val, count) => `<button class="cat-btn" data-cat="${escapeHtml(val)}" style="border:1px solid var(--rule);background:none;color:inherit;border-radius:999px;padding:.4rem .95rem;font:inherit;font-size:.85rem;cursor:pointer;transition:background .15s,color .15s;">${escapeHtml(label)} <span style="opacity:.45">${count}</span></button>`;
-      bar.innerHTML = mkBtn('All', '__all__', products.length) + catList.map(c => mkBtn(c, c, cats[c])).join('');
-      grid.parentNode.insertBefore(bar, grid);
-      function setActive(btn) { bar.querySelectorAll('.cat-btn').forEach(x => { x.style.background = 'none'; x.style.color = 'inherit'; x.style.borderColor = 'var(--rule)'; }); btn.style.background = 'var(--ink)'; btn.style.color = 'var(--paper)'; btn.style.borderColor = 'var(--ink)'; }
-      function renderCards(cat) { const list = cat === '__all__' ? products : products.filter(p => (p.category || 'Other') === cat); grid.innerHTML = list.map(card).join(''); }
-      bar.addEventListener('click', e => { const b = e.target.closest('.cat-btn'); if (!b) return; setActive(b); renderCards(b.dataset.cat); });
-      renderCards('__all__');
-      setActive(bar.querySelector('.cat-btn'));
+      const mkBtn = (label, val, count) => `<button class="cat-btn" data-cat="${escapeHtml(val)}">${escapeHtml(label)}<span class="cat-count">${count}</span></button>`;
+      const controls = document.createElement('div');
+      controls.className = 'catalog-controls';
+      controls.innerHTML =
+        '<input class="catalog-search" type="search" placeholder="Search products…" aria-label="Search products">' +
+        '<div class="cat-filter">' + mkBtn('All', '__all__', products.length) + catList.map(c => mkBtn(c, c, cats[c])).join('') + '</div>';
+      grid.parentNode.insertBefore(controls, grid);
+
+      const searchEl = controls.querySelector('.catalog-search');
+      const filterEl = controls.querySelector('.cat-filter');
+      let activeCat = '__all__';
+      function applyFilter() {
+        const q = (searchEl.value || '').trim().toLowerCase();
+        let list = activeCat === '__all__' ? products : products.filter(p => (p.category || 'Other') === activeCat);
+        if (q) list = list.filter(p => (p.name || '').toLowerCase().includes(q) || (p.category || '').toLowerCase().includes(q));
+        grid.innerHTML = list.length ? list.map(card).join('') : '<div class="catalog-noresults">No products match — try another category or search.</div>';
+      }
+      filterEl.addEventListener('click', e => {
+        const b = e.target.closest('.cat-btn'); if (!b) return;
+        filterEl.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active');
+        activeCat = b.dataset.cat;
+        applyFilter();
+      });
+      searchEl.addEventListener('input', applyFilter);
+      filterEl.querySelector('.cat-btn').classList.add('active');
+      applyFilter();
 
       if (meta) {
         meta.style.display = 'flex';
