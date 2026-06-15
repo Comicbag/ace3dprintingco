@@ -5,15 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Ace 3D Printing Co. — Custom-made goods</title>
 <meta name="description" content="Custom and ready-to-ship 3D-printed products. Printed in our Hunterdon County, NJ studio.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ace 3D Printing Co.">
+<meta property="og:title" content="Ace 3D Printing Co. — Custom-made goods">
+<meta property="og:description" content="Custom and ready-to-ship 3D-printed products. Printed in our Hunterdon County, NJ studio.">
+<meta property="og:url" content="https://ace3dprintingco.com/">
+<meta property="og:image" content="https://ace3dprintingco.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:image" content="https://ace3dprintingco.com/assets/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/logo.png">
 <style>
   :root {
     --ink: #0e0e0c;
     --paper: #f3efe6;
     --paper-warm: #eae3d3;
-    --accent: #d8431f;
+    /* Accent unified with acephotographyco.com (amber #E8A33D) so the two
+       Ace sites share the same brand language. Previously brick red
+       (#d8431f) which made the 3D shop feel like a different company. */
+    --accent: #E8A33D;
+    --accent-deep: #c2872d;
     --mute: #6b6658;
     --rule: #1a1a17;
   }
@@ -47,15 +62,26 @@
 
   /* NAV */
   nav {
+    /* Was mix-blend-mode:difference (inverting everything against page bg).
+       That inverted the logo into ugly cyan/teal artifacts. Switched to a
+       solid paper-tinted nav with a blur, matching acephotographyco.com. */
     position: fixed;
     top: 0; left: 0; right: 0;
-    padding: 1.2rem 2.5rem;
+    padding: 0.9rem 2.5rem;
     display: flex; justify-content: space-between; align-items: center;
     z-index: 50;
-    mix-blend-mode: difference;
-    color: #f3efe6;
+    background: rgba(243, 239, 230, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(26, 26, 23, 0.08);
+    color: var(--ink);
   }
-  nav .brand { font-weight: 700; letter-spacing: 0.18em; font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
+  nav .brand {
+    display: flex; align-items: center; gap: 0.7rem;
+    text-decoration: none; color: inherit;
+  }
+  nav .brand img { height: 56px; width: auto; display: block; }
+  nav .brand .brand-text { display: none; }
   nav ul { list-style: none; display: flex; gap: 1.6rem; align-items: center; }
   nav a {
     color: inherit; text-decoration: none;
@@ -307,6 +333,25 @@
     font-size: 1.6rem; font-weight: 400; color: var(--accent);
     margin-top: 0.3rem;
   }
+  .product-card .product-variants {
+    list-style: none;
+    margin: 0.3rem 0 0; padding: 0.5rem 0 0;
+    border-top: 1px solid rgba(26,26,23,0.08);
+    display: flex; flex-direction: column; gap: 0.3rem;
+  }
+  .product-card .product-variants li {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+  .product-card .product-variants .variant-label {
+    color: #2a2822;
+  }
+  .product-card .product-variants .variant-price {
+    font-family: 'Fraunces', serif;
+    font-variation-settings: "opsz" 144;
+    font-size: 1.05rem; color: var(--accent);
+  }
   .product-card .product-cta {
     align-self: flex-start;
     padding: 0.55rem 1.1rem;
@@ -410,7 +455,10 @@
 <body>
 
 <nav>
-  <div class="brand">ACE — 3D PRINTING</div>
+  <a href="/" class="brand">
+    <img src="assets/logo.png" alt="Ace 3D Printing Co.">
+    <span class="brand-text">ACE 3D PRINTING CO.</span>
+  </a>
   <ul>
     <li><a href="https://acedigitalservicesco.com">Ace Digital <span class="ext">↗</span></a></li>
       <li><a href="https://ace3dprintingco.com" class="active">Ace 3D Printing</a></li>
@@ -573,34 +621,57 @@
         return;
       }
 
-      grid.innerHTML = products.map(p => {
+      function card(p) {
         const imgHtml = p.image_url
           ? `<div class="product-card-img"><img src="${p.image_url}" alt="${escapeHtml(p.name || '')}" loading="lazy"></div>`
           : `<div class="product-card-img placeholder"></div>`;
         const priceNum = parseFloat(p.price);
-        const priceHtml = (p.price && !Number.isNaN(priceNum))
-          ? `<div class="product-price">$${priceNum.toFixed(2)}</div>`
-          : '';
-        const ctaHref = p.etsy_url || p.website_url || 'mailto:ace3dprintingco@gmail.com?subject=Order: ' + encodeURIComponent(p.name || '');
-        const ctaLabel = p.etsy_url ? 'Buy on Etsy ↗' : 'Inquire to order';
-        const ctaTarget = p.etsy_url ? ' target="_blank" rel="noopener"' : '';
+        const hasVariants = Array.isArray(p.variants) && p.variants.length > 0;
+        const priceHtml = hasVariants
+          ? `<ul class="product-variants">${p.variants.map(v => {
+              const vn = parseFloat(v.price);
+              const vp = !Number.isNaN(vn) ? `$${vn.toFixed(2)}` : escapeHtml(v.price || '');
+              return `<li><span class="variant-label">${escapeHtml(v.label || '')}</span><span class="variant-price">${vp}</span></li>`;
+            }).join('')}</ul>`
+          : (p.price && !Number.isNaN(priceNum))
+            ? `<div class="product-price">$${priceNum.toFixed(2)}</div>`
+            : '';
+        const mailto = 'mailto:ace3dprintingco@gmail.com?subject=' + encodeURIComponent('Order: ' + (p.name || '')) + '&body=' + encodeURIComponent('Hi! I would like to order: ' + (p.name || '') + '\n\nPersonalization (name/text): \nColor preference: \n');
+        const ctaHref = p.etsy_url || p.website_url || mailto;
+        const ctaLabel = p.etsy_url ? 'Buy on Etsy ↗' : (p.website_url ? 'Order now ↗' : 'Inquire to order');
+        const ctaTarget = (p.etsy_url || p.website_url) ? ' target="_blank" rel="noopener"' : '';
         return `
           <article class="product-card">
             ${imgHtml}
             <div class="product-card-body">
               <div class="product-meta">${escapeHtml(p.category || 'Custom')}</div>
               <h3>${escapeHtml(p.name || 'Untitled')}</h3>
-              ${p.description ? `<div class="product-desc">${escapeHtml(p.description.slice(0, 180))}${p.description.length > 180 ? '…' : ''}</div>` : ''}
+              ${p.description ? `<div class="product-desc">${escapeHtml(p.description.slice(0, 140))}${p.description.length > 140 ? '…' : ''}</div>` : ''}
               ${priceHtml}
               <a class="product-cta" href="${ctaHref}"${ctaTarget}>${ctaLabel}</a>
             </div>
-          </article>
-        `;
-      }).join('');
+          </article>`;
+      }
+
+      // category filter bar (keeps ~270 products browsable)
+      const order = ['Sports Fan Gear','Personalized Keychains','Baby & Kids','NFC & QR Stands','Cars & Racing','Trophies & Awards','Personalized Gifts'];
+      const cats = {};
+      products.forEach(p => { const c = p.category || 'Other'; cats[c] = (cats[c] || 0) + 1; });
+      const catList = Object.keys(cats).sort((a, b) => { const ia = order.indexOf(a), ib = order.indexOf(b); return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib); });
+      const bar = document.createElement('div');
+      bar.style.cssText = 'display:flex;flex-wrap:wrap;gap:.5rem;margin:0 0 1.75rem;';
+      const mkBtn = (label, val, count) => `<button class="cat-btn" data-cat="${escapeHtml(val)}" style="border:1px solid var(--rule);background:none;color:inherit;border-radius:999px;padding:.4rem .95rem;font:inherit;font-size:.85rem;cursor:pointer;transition:background .15s,color .15s;">${escapeHtml(label)} <span style="opacity:.45">${count}</span></button>`;
+      bar.innerHTML = mkBtn('All', '__all__', products.length) + catList.map(c => mkBtn(c, c, cats[c])).join('');
+      grid.parentNode.insertBefore(bar, grid);
+      function setActive(btn) { bar.querySelectorAll('.cat-btn').forEach(x => { x.style.background = 'none'; x.style.color = 'inherit'; x.style.borderColor = 'var(--rule)'; }); btn.style.background = 'var(--ink)'; btn.style.color = 'var(--paper)'; btn.style.borderColor = 'var(--ink)'; }
+      function renderCards(cat) { const list = cat === '__all__' ? products : products.filter(p => (p.category || 'Other') === cat); grid.innerHTML = list.map(card).join(''); }
+      bar.addEventListener('click', e => { const b = e.target.closest('.cat-btn'); if (!b) return; setActive(b); renderCards(b.dataset.cat); });
+      renderCards('__all__');
+      setActive(bar.querySelector('.cat-btn'));
 
       if (meta) {
         meta.style.display = 'flex';
-        countEl.textContent = `${products.length} active product${products.length !== 1 ? 's' : ''}`;
+        countEl.textContent = `${products.length} product${products.length !== 1 ? 's' : ''}`;
         if (data.updated_at) {
           const d = new Date(data.updated_at);
           updatedEl.textContent = `Updated ${d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
