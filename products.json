@@ -4351,9 +4351,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-name-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/8x23cwaXueAs8JBenkfw50l",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9riVC1reHm1A",
+      "stripe_price_id": "price_1TijYBJYECckCNcJhEQnzL5g",
+      "stripe_link_id": "plink_1TijYCJYECckCNcJZIdx7Fgq"
     },
     {
       "id": "pptool-monogram",
@@ -4363,9 +4366,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-monogram.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/28E6oIe9G3VO6Bt5QOfw50m",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9rdn3AXcLRbe",
+      "stripe_price_id": "price_1TijYCJYECckCNcJKrTc16Hq",
+      "stripe_link_id": "plink_1TijYCJYECckCNcJULNTJCXo"
     },
     {
       "id": "pptool-cut-out-keychain",
@@ -4375,9 +4381,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-cut-out-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/00w14o2qY63W8JB1Ayfw50n",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9roVg68zqVs5",
+      "stripe_price_id": "price_1TijYDJYECckCNcJdg7GYycE",
+      "stripe_link_id": "plink_1TijYDJYECckCNcJj6y4KB9h"
     },
     {
       "id": "pptool-multi-level-keychain",
@@ -4387,9 +4396,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-multi-level-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/eVqeVe9TqakcaRJ4MKfw50o",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9r2yTZkijxtn",
+      "stripe_price_id": "price_1TijYEJYECckCNcJQOfX7riI",
+      "stripe_link_id": "plink_1TijYEJYECckCNcJeHF1gupr"
     },
     {
       "id": "pptool-tag-keychain",
@@ -4399,9 +4411,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-tag-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/28E9AU2qY3VOgc31Ayfw50p",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9rAXffGBy2Pe",
+      "stripe_price_id": "price_1TijYFJYECckCNcJuFct3wqg",
+      "stripe_link_id": "plink_1TijYFJYECckCNcJfgiU13Mn"
     },
     {
       "id": "pptool-name-plate",
@@ -4411,9 +4426,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-name-plate.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/4gM3cw2qYdwo1h90wufw50q",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sWfS0sXphe3",
+      "stripe_price_id": "price_1TijYGJYECckCNcJlq1z9maJ",
+      "stripe_link_id": "plink_1TijYGJYECckCNcJ9F6U50f3"
     },
     {
       "id": "pptool-cut-monogram",
@@ -4423,9 +4441,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-cut-monogram.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/3cIbJ27Libog6Bt0wufw50r",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sOG3bPU7jvB",
+      "stripe_price_id": "price_1TijYHJYECckCNcJlzVgp9Ra",
+      "stripe_link_id": "plink_1TijYHJYECckCNcJcZffJ7Hm"
     },
     {
       "id": "pptool-led-lamp-name",
@@ -4435,9 +4456,12 @@
       "price": "35.00",
       "image_url": "./images/pp-tools/pptool-led-lamp-name.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/eVqaEYe9Gboggc3cfcfw50s",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s6rehdxY6J3",
+      "stripe_price_id": "price_1TijYIJYECckCNcJhJQF1pk1",
+      "stripe_link_id": "plink_1TijYIJYECckCNcJvs6me4re"
     },
     {
       "id": "pptool-handle-sign",
@@ -4447,9 +4471,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-handle-sign.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/dRm28saXu2RKaRJ0wufw50t",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s5SQf6FfX9n",
+      "stripe_price_id": "price_1TijYJJYECckCNcJrrRFTvQN",
+      "stripe_link_id": "plink_1TijYJJYECckCNcJE0xDqEoJ"
     },
     {
       "id": "pptool-cube-name",
@@ -4459,9 +4486,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-cube-name.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/aFa14od5C9g8bVNfrofw50u",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9srSmUmNRfqx",
+      "stripe_price_id": "price_1TijYJJYECckCNcJOwpqeVOm",
+      "stripe_link_id": "plink_1TijYKJYECckCNcJAYv1lKdw"
     },
     {
       "id": "pptool-pen-topper",
@@ -4471,9 +4501,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-pen-topper.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/3cI3cw8Pm8c49NF1Ayfw50v",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s6oqMKm63af",
+      "stripe_price_id": "price_1TijYKJYECckCNcJT00rIkRa",
+      "stripe_link_id": "plink_1TijYLJYECckCNcJLcYR18xo"
     },
     {
       "id": "pptool-cookie-cutter-text",
@@ -4483,9 +4516,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-cookie-cutter-text.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/8x26oI0iQ2RKcZRcfcfw50w",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9syzmaW31aIH",
+      "stripe_price_id": "price_1TijYLJYECckCNcJZl4CarAt",
+      "stripe_link_id": "plink_1TijYMJYECckCNcJ3KCxlEl2"
     },
     {
       "id": "pptool-bag-tag-editor",
@@ -4495,9 +4531,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-bag-tag-editor.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/9B628s8Pmbog9NF6USfw50x",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sxWnS1nJOJV",
+      "stripe_price_id": "price_1TijYMJYECckCNcJqWnXkFLe",
+      "stripe_link_id": "plink_1TijYMJYECckCNcJ0nx3WsH9"
     },
     {
       "id": "pptool-monogram-keychain",
@@ -4507,9 +4546,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-monogram-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/3cIbJ2d5C0JC9NF6USfw50y",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9svEmhYzoFxR",
+      "stripe_price_id": "price_1TijYNJYECckCNcJjOyOYSyb",
+      "stripe_link_id": "plink_1TijYNJYECckCNcJM4HslEUV"
     },
     {
       "id": "pptool-qr-code-keychain",
@@ -4519,9 +4561,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-qr-code-keychain.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/4gMeVe2qYeAscZR3IGfw50z",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9skLFt19e2uj",
+      "stripe_price_id": "price_1TijYOJYECckCNcJrDSPFkm2",
+      "stripe_link_id": "plink_1TijYOJYECckCNcJMsuWNH1L"
     },
     {
       "id": "pptool-bubble-charm-generator",
@@ -4531,9 +4576,12 @@
       "price": "10.00",
       "image_url": "./images/pp-tools/pptool-bubble-charm-generator.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/bJeeVe9Tq0JC7Fxenkfw50A",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9slBwLxAuEp4",
+      "stripe_price_id": "price_1TijYPJYECckCNcJcuMU8Ug9",
+      "stripe_link_id": "plink_1TijYPJYECckCNcJf9Ur0Alr"
     },
     {
       "id": "pptool-parametric-vase",
@@ -4543,9 +4591,12 @@
       "price": "20.00",
       "image_url": "./images/pp-tools/pptool-parametric-vase.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/00w5kEghO9g8cZRfrofw50B",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s9EFxQ1WV7x",
+      "stripe_price_id": "price_1TijYQJYECckCNcJ8enyT2Tt",
+      "stripe_link_id": "plink_1TijYQJYECckCNcJ9BQ5kRA0"
     },
     {
       "id": "pptool-lego-brick-generator",
@@ -4555,9 +4606,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-lego-brick-generator.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/00w28s7LifEw8JB4MKfw50C",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s17b0mwgNSt",
+      "stripe_price_id": "price_1TijYQJYECckCNcJ6YEuL11n",
+      "stripe_link_id": "plink_1TijYRJYECckCNcJHzl1zJog"
     },
     {
       "id": "pptool-text-lego-generator",
@@ -4567,9 +4621,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-text-lego-generator.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/9B600k9Tq9g83ph7YWfw50D",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s7REx3pCQcR",
+      "stripe_price_id": "price_1TijYRJYECckCNcJuIQ7eCd9",
+      "stripe_link_id": "plink_1TijYSJYECckCNcJj2sOXAWC"
     },
     {
       "id": "pptool-lego-monogram",
@@ -4579,9 +4636,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-lego-monogram.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/14AfZie9G3VO5xp3IGfw50E",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9szpp4Ou0RO4",
+      "stripe_price_id": "price_1TijYSJYECckCNcJK559AEgl",
+      "stripe_link_id": "plink_1TijYSJYECckCNcJI3y669F2"
     },
     {
       "id": "pptool-smart-organizer",
@@ -4591,9 +4651,12 @@
       "price": "20.00",
       "image_url": "./images/pp-tools/pptool-smart-organizer.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/4gMfZi2qY63W3ph2ECfw50F",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s9eCi3BqRpA",
+      "stripe_price_id": "price_1TijYTJYECckCNcJNt5wjYpw",
+      "stripe_link_id": "plink_1TijYTJYECckCNcJ3fk8Oh40"
     },
     {
       "id": "pptool-drawer-organizer-system",
@@ -4603,9 +4666,12 @@
       "price": "20.00",
       "image_url": "./images/pp-tools/pptool-drawer-organizer-system.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/28EcN60iQ2RK4tlcfcfw50G",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sV25OAMrbYo",
+      "stripe_price_id": "price_1TijYUJYECckCNcJ3AZMVHVr",
+      "stripe_link_id": "plink_1TijYUJYECckCNcJKtp0s2Hy"
     },
     {
       "id": "pptool-name-desk-organizer",
@@ -4615,9 +4681,12 @@
       "price": "20.00",
       "image_url": "./images/pp-tools/pptool-name-desk-organizer.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/bJefZighOfEw8JBenkfw50H",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9ssavGoXRAEm",
+      "stripe_price_id": "price_1TijYVJYECckCNcJThP8ODiL",
+      "stripe_link_id": "plink_1TijYVJYECckCNcJ3Owe0o8P"
     },
     {
       "id": "pptool-nickless-name-tag",
@@ -4627,9 +4696,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-nickless-name-tag.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/fZucN64z61NGcZR7YWfw50I",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sMJdelVo7Zw",
+      "stripe_price_id": "price_1TijYWJYECckCNcJSASB4T4w",
+      "stripe_link_id": "plink_1TijYWJYECckCNcJ62JFt2W6"
     },
     {
       "id": "pptool-groovy-name-sign",
@@ -4639,9 +4711,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-groovy-name-sign.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/7sY8wQ8Pmcsk1h94MKfw50J",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sJ7Plpg2kuG",
+      "stripe_price_id": "price_1TijYXJYECckCNcJ7IBgy5Xe",
+      "stripe_link_id": "plink_1TijYXJYECckCNcJLz5cunh2"
     },
     {
       "id": "pptool-shape-puzzle",
@@ -4651,9 +4726,12 @@
       "price": "16.00",
       "image_url": "./images/pp-tools/pptool-shape-puzzle.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/dRm9AUe9G0JC0d5bb8fw50K",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sBpzW9dxNQE",
+      "stripe_price_id": "price_1TijYYJYECckCNcJdhN4Ir6H",
+      "stripe_link_id": "plink_1TijYYJYECckCNcJGOYcs9Na"
     },
     {
       "id": "pptool-name-puzzle-letters",
@@ -4663,9 +4741,12 @@
       "price": "16.00",
       "image_url": "./images/pp-tools/pptool-name-puzzle-letters.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/3cIaEYe9G1NGbVN2ECfw50L",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sXlKHJ3iX2O",
+      "stripe_price_id": "price_1TijYYJYECckCNcJF6giaOGH",
+      "stripe_link_id": "plink_1TijYZJYECckCNcJRu62H961"
     },
     {
       "id": "pptool-shape-monogram",
@@ -4675,9 +4756,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-shape-monogram.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/5kQ5kEfdK7808JBfrofw50M",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9shZKwWEU1xz",
+      "stripe_price_id": "price_1TijYZJYECckCNcJVQCSZuHc",
+      "stripe_link_id": "plink_1TijYaJYECckCNcJasHeMPLe"
     },
     {
       "id": "pptool-pattern-monogram",
@@ -4687,9 +4771,12 @@
       "price": "12.00",
       "image_url": "./images/pp-tools/pptool-pattern-monogram.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/5kQ6oI8Pm2RK8JB930fw50N",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sWveL8kfUf0",
+      "stripe_price_id": "price_1TijYaJYECckCNcJJIWVb05L",
+      "stripe_link_id": "plink_1TijYaJYECckCNcJZhNXOjSi"
     },
     {
       "id": "pptool-layered-name-sign",
@@ -4699,9 +4786,12 @@
       "price": "24.00",
       "image_url": "./images/pp-tools/pptool-layered-name-sign.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/dRm00kc1ydwo5xpcfcfw50O",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9svpcH9mtdbu",
+      "stripe_price_id": "price_1TijYbJYECckCNcJlijHkRAA",
+      "stripe_link_id": "plink_1TijYbJYECckCNcJIROjmuZx"
     },
     {
       "id": "pptool-map-to-stl",
@@ -4711,9 +4801,12 @@
       "price": "28.00",
       "image_url": "./images/pp-tools/pptool-map-to-stl.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/3cI7sM9Tqdwo2ldcfcfw50P",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9skx5vaViPiq",
+      "stripe_price_id": "price_1TijYcJYECckCNcJfocokYKD",
+      "stripe_link_id": "plink_1TijYcJYECckCNcJtlBL1TQa"
     },
     {
       "id": "pptool-svg-clicker-generator",
@@ -4723,9 +4816,12 @@
       "price": "14.00",
       "image_url": "./images/pp-tools/pptool-svg-clicker-generator.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/dRm6oI3v2fEwaRJ1Ayfw50Q",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9spc4GgcN7Jx",
+      "stripe_price_id": "price_1TijYdJYECckCNcJ81i8JG4z",
+      "stripe_link_id": "plink_1TijYdJYECckCNcJ7iF99EQk"
     },
     {
       "id": "pptool-text-clicker",
@@ -4735,9 +4831,12 @@
       "price": "14.00",
       "image_url": "./images/pp-tools/pptool-text-clicker.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/00wfZid5C7805xp4MKfw50R",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9s33CKs7upZ3",
+      "stripe_price_id": "price_1TijYeJYECckCNcJ9iT1i6os",
+      "stripe_link_id": "plink_1TijYeJYECckCNcJ4rtlkIbp"
     },
     {
       "id": "pptool-container-generator",
@@ -4747,9 +4846,12 @@
       "price": "16.00",
       "image_url": "./images/pp-tools/pptool-container-generator.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/14A14oaXu780gc36USfw50S",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sON6UAjgNDu",
+      "stripe_price_id": "price_1TijYeJYECckCNcJNXIx3q2Q",
+      "stripe_link_id": "plink_1TijYfJYECckCNcJqMTrWdvp"
     },
     {
       "id": "pptool-hinged-box",
@@ -4759,9 +4861,12 @@
       "price": "16.00",
       "image_url": "./images/pp-tools/pptool-hinged-box.png",
       "available": true,
-      "website_url": null,
+      "website_url": "https://buy.stripe.com/fZu7sMd5CgIA4tlcfcfw50T",
       "etsy_url": null,
-      "is_tool": true
+      "is_tool": true,
+      "stripe_product_id": "prod_Ui9sxesJXmUObt",
+      "stripe_price_id": "price_1TijYfJYECckCNcJk6agMFKq",
+      "stripe_link_id": "plink_1TijYgJYECckCNcJonEdx0Tn"
     }
   ]
 }
