@@ -433,6 +433,14 @@
   .dept-btn:hover { border-color: var(--ink); }
   .dept-btn.active { background: var(--accent); color: var(--paper); border-color: var(--accent); }
   .dept-btn.active .cat-count { opacity: 0.7; }
+  .cat-tiles-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); margin-bottom: 0.85rem; }
+  .cat-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0.8rem; margin-bottom: 2.5rem; }
+  .cat-tile { border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; cursor: pointer; background: var(--paper-warm); padding: 0; text-align: left; transition: transform .2s, border-color .2s; display: flex; flex-direction: column; }
+  .cat-tile:hover { border-color: var(--ink); transform: translateY(-2px); }
+  .cat-tile-img { aspect-ratio: 1 / 1; background-color: #e8e2d6; background-size: cover; background-position: center; }
+  .cat-tile-cap { padding: 0.6rem 0.7rem 0.7rem; }
+  .cat-tile-cap b { display: block; font-size: 0.82rem; line-height: 1.2; }
+  .cat-tile-cap span { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--mute); letter-spacing: 0.08em; }
   .catalog-noresults {
     padding: 2.5rem 0; color: var(--mute);
     font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em;
@@ -816,6 +824,33 @@
       });
       controls.addEventListener('input', e => {
         if (e.target.classList.contains('catalog-search')) { searchQ = e.target.value; applyFilter(); }
+      });
+
+      // "Shop by category" visual tiles — the quick, shoppable entry above the filters.
+      const TILES = [
+        { label: 'Pokémon', tag: 'Pokémon' }, { label: 'Kirby', tag: 'Kirby' }, { label: 'Super Mario', tag: 'Super Mario' },
+        { label: 'LED Lamps', tag: 'Lamps & Lights' }, { label: 'Controller Holders', tag: 'Controller Holders' },
+        { label: 'Sports Jerseys', tag: 'Jerseys' }, { label: 'NFC Business Stands', tag: 'NFC Stands' },
+        { label: 'Name Signs', tag: 'Name Signs' }, { label: 'Personalized Gifts', tag: 'Personalized Gifts' },
+        { label: 'Keychains', tag: 'Keychains' },
+      ];
+      const tilesEl = document.createElement('div');
+      let tilesHtml = '<div class="cat-tiles-label">Shop by category</div><div class="cat-tiles">';
+      TILES.forEach(t => {
+        const n = products.filter(p => (p.tags || []).includes(t.tag)).length;
+        if (!n) return;
+        const prod = products.find(p => (p.tags || []).includes(t.tag) && p.image_url);
+        const img = prod ? prod.image_url : '';
+        tilesHtml += `<button class="cat-tile" data-tag="${escapeHtml(t.tag)}"><div class="cat-tile-img" style="background-image:url('${escapeHtml(img)}')"></div><div class="cat-tile-cap"><b>${escapeHtml(t.label)}</b><span>${n} item${n !== 1 ? 's' : ''}</span></div></button>`;
+      });
+      tilesHtml += '</div>';
+      tilesEl.innerHTML = tilesHtml;
+      grid.parentNode.insertBefore(tilesEl, controls);
+      tilesEl.addEventListener('click', e => {
+        const t = e.target.closest('.cat-tile'); if (!t) return;
+        activeDept = 'all'; active.clear(); active.add(t.dataset.tag);
+        renderControls(); applyFilter();
+        controls.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
 
       renderControls();
