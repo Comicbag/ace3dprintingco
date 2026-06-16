@@ -710,8 +710,8 @@
       // faceted browse: global search + multi-select tag groups (Type / Theme / Occasion).
       // Selecting multiple tags AND-filters — e.g. Keychains + Sports = sports keychains.
       const TAG_GROUPS = [
-        { label: 'Browse by type', tags: ['Keychains','Monograms','Name Signs','Frames & Wall Art','Lamps & Lights','Trophies & Awards','Jerseys','Piggy Banks','Organizers','Boxes & Containers','Puzzles','Cookie Cutters','Vases','Bookmarks','Fidgets','Charms & Tags','Toys & Games','Wall Art & Decor','NFC Stands','QR Stands'] },
-        { label: 'Browse by theme', tags: ['Sports','Soccer','Football','Basketball','Combat Sports','Cars & Racing','Pokémon','Kids & Baby','For Business'] },
+        { label: 'Browse by type', tags: ['Figures & Models','Keychains','Monograms','Name Signs','Frames & Wall Art','Lamps & Lights','Controller Holders','Trophies & Awards','Jerseys','Piggy Banks','Organizers','Boxes & Containers','Puzzles','Cookie Cutters','Vases','Planters','Bookmarks','Fidgets','Charms & Tags','Toys & Games','Wall Art & Decor','NFC Stands','QR Stands'] },
+        { label: 'Browse by theme', tags: ['Pokémon','Kirby','Super Mario','Palworld','Digimon','SpongeBob','Sonic','Sports','Soccer','Football','Basketball','Combat Sports','Cars & Racing','Kids & Baby','For Business'] },
         { label: '🎁 Gifts & occasions', tags: ["Father's Day",'Graduation','New Baby','Nurse & Healthcare','Gifts for Kids','Personalized Gifts'] },
       ];
       const tagCount = {};
@@ -719,7 +719,7 @@
       const active = new Set();
       const controls = document.createElement('div');
       controls.className = 'catalog-controls';
-      let html = '<input class="catalog-search" type="search" placeholder="Search all 300+ products…" aria-label="Search products">';
+      let html = '<input class="catalog-search" type="search" placeholder="Search all 700+ products…" aria-label="Search products">';
       TAG_GROUPS.forEach(g => {
         const avail = g.tags.filter(t => tagCount[t]);
         if (!avail.length) return;
