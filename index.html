@@ -482,6 +482,7 @@
   .delay-3 { animation-delay: 0.4s; }
   @keyframes rise { to { opacity: 1; transform: translateY(0); } }
 </style>
+  <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
 
@@ -668,9 +669,10 @@
             ? `<div class="product-price">$${priceNum.toFixed(2)}</div>`
             : '';
         const mailto = 'mailto:ace3dprintingco@gmail.com?subject=' + encodeURIComponent('Order: ' + (p.name || '')) + '&body=' + encodeURIComponent('Hi! I would like to order: ' + (p.name || '') + '\n\nPersonalization (name/text): \nColor preference: \n');
-        const ctaHref = p.etsy_url || p.website_url || mailto;
-        const ctaLabel = p.etsy_url ? 'Buy on Etsy ↗' : (p.website_url ? 'Order now ↗' : 'Inquire to order');
-        const ctaTarget = (p.etsy_url || p.website_url) ? ' target="_blank" rel="noopener"' : '';
+        // On-page checkout when a Stripe price exists; otherwise Etsy / payment link / inquire.
+        const cta = p.stripe_price_id
+          ? `<button class="product-cta" data-price="${escapeHtml(p.stripe_price_id)}" data-name="${escapeHtml(p.name || '')}">Order now</button>`
+          : `<a class="product-cta" href="${p.etsy_url || p.website_url || mailto}"${(p.etsy_url || p.website_url) ? ' target="_blank" rel="noopener"' : ''}>${p.etsy_url ? 'Buy on Etsy ↗' : (p.website_url ? 'Order now ↗' : 'Inquire to order')}</a>`;
         return `
           <article class="product-card">
             ${imgHtml}
@@ -679,7 +681,7 @@
               <h3>${escapeHtml(p.name || 'Untitled')}</h3>
               ${p.description ? `<div class="product-desc">${escapeHtml(p.description.slice(0, 140))}${p.description.length > 140 ? '…' : ''}</div>` : ''}
               ${priceHtml}
-              <a class="product-cta" href="${ctaHref}"${ctaTarget}>${ctaLabel}</a>
+              ${cta}
             </div>
           </article>`;
       }
@@ -753,5 +755,50 @@
   })();
 </script>
 
+<script>
+  /* On-page Stripe Embedded Checkout */
+  (() => {
+    const PK = 'pk_live_51TihFRJYECckCNcJDorIIcZxTXYBEuFsUM2damxXuMJLnCffmBt4wu9f5o9vX3pA44aSQSZs6mAsRmai6q7bhGhA00Amgb7J83';
+    let stripe = null, checkout = null;
+    const ov = document.createElement('div');
+    ov.id = 'co-overlay';
+    ov.innerHTML = '<div id="co-panel"><button id="co-close" aria-label="Close checkout">✕ Close</button><div id="co-mount"></div></div>';
+    document.body.appendChild(ov);
+    const st = document.createElement('style');
+    st.textContent = '#co-overlay{position:fixed;inset:0;background:rgba(14,14,12,.65);display:none;align-items:flex-start;justify-content:center;z-index:9999;overflow:auto;padding:4vh 1rem 2rem;}#co-overlay.open{display:flex;}#co-panel{background:#fff;width:100%;max-width:560px;position:relative;border-radius:6px;min-height:240px;box-shadow:0 20px 60px -10px rgba(0,0,0,.5);}#co-close{position:absolute;top:-2.6rem;right:0;background:none;border:none;color:#fff;font-family:monospace;font-size:.8rem;letter-spacing:.1em;cursor:pointer;}#co-mount{padding:.5rem;}';
+    document.head.appendChild(st);
+    const close = () => { ov.classList.remove('open'); document.body.style.overflow=''; if (checkout){ try{ checkout.destroy(); }catch(e){} checkout=null; } };
+    ov.querySelector('#co-close').addEventListener('click', close);
+    ov.addEventListener('click', e => { if (e.target === ov) close(); });
+    async function openCheckout(price) {
+      if (!window.Stripe) return;
+      if (!stripe) stripe = Stripe(PK);
+      ov.querySelector('#co-mount').innerHTML = '<div style="padding:2rem;font-family:monospace;color:#666;font-size:.8rem">Loading secure checkout…</div>';
+      ov.classList.add('open'); document.body.style.overflow='hidden';
+      try {
+        checkout = await stripe.initEmbeddedCheckout({
+          fetchClientSecret: () => fetch('/api/checkout/create-session', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ price }) })
+            .then(r => r.json()).then(d => { if (!d.clientSecret) throw new Error(d.error || 'no secret'); return d.clientSecret; })
+        });
+        ov.querySelector('#co-mount').innerHTML = '';
+        checkout.mount('#co-mount');
+      } catch (e) {
+        ov.querySelector('#co-mount').innerHTML = '<div style="padding:2rem;font-family:monospace;color:#a33;font-size:.85rem">Sorry — checkout could not load. Please email ace3dprintingco@gmail.com and we will take your order directly.</div>';
+      }
+    }
+    document.addEventListener('click', e => {
+      const b = e.target.closest('.product-cta[data-price]');
+      if (!b) return;
+      e.preventDefault();
+      openCheckout(b.dataset.price);
+    });
+    if (new URLSearchParams(location.search).get('checkout') === 'complete') {
+      const t = document.createElement('div');
+      t.textContent = '✓ Thank you — your order is in! We will email you about personalization + shipping.';
+      t.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#1a1a17;color:#f3efe6;padding:1rem;text-align:center;font-family:monospace;font-size:.82rem;letter-spacing:.04em;z-index:10000;';
+      document.body.appendChild(t); setTimeout(() => t.remove(), 9000);
+    }
+  })();
+</script>
 </body>
 </html>
