@@ -421,6 +421,18 @@
   .filter-label { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--mute); }
   .clear-filters { align-self: flex-start; margin-top: 0.25rem; padding: 0.35rem 0.85rem; border: 1px solid var(--rule); background: none; color: var(--mute); font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; cursor: pointer; border-radius: 999px; }
   .clear-filters:hover { border-color: var(--ink); color: var(--ink); }
+  .dept-filter { display: flex; flex-wrap: wrap; gap: 0.5rem; border-bottom: 1px solid var(--rule); padding-bottom: 1.25rem; }
+  .dept-btn {
+    padding: 0.6rem 1.3rem;
+    border: 1px solid var(--rule); border-radius: 999px;
+    background: none; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.06em; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .dept-btn .cat-count { opacity: 0.4; margin-left: 0.4rem; font-weight: 400; }
+  .dept-btn:hover { border-color: var(--ink); }
+  .dept-btn.active { background: var(--accent); color: var(--paper); border-color: var(--accent); }
+  .dept-btn.active .cat-count { opacity: 0.7; }
   .catalog-noresults {
     padding: 2.5rem 0; color: var(--mute);
     font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; letter-spacing: 0.1em;
@@ -707,53 +719,94 @@
           </article>`;
       }
 
-      // faceted browse: global search + multi-select tag groups (Type / Theme / Occasion).
-      // Selecting multiple tags AND-filters — e.g. Keychains + Sports = sports keychains.
-      const TAG_GROUPS = [
-        { label: 'Browse by type', tags: ['Figures & Models','Keychains','Monograms','Name Signs','Frames & Wall Art','Lamps & Lights','Controller Holders','Trophies & Awards','Jerseys','Piggy Banks','Organizers','Boxes & Containers','Puzzles','Cookie Cutters','Vases','Planters','Bookmarks','Fidgets','Charms & Tags','Toys & Games','Wall Art & Decor','NFC Stands','QR Stands'] },
-        { label: 'Browse by theme', tags: ['Pokémon','Kirby','Super Mario','Palworld','Digimon','SpongeBob','Sonic','Sports','Soccer','Football','Basketball','Combat Sports','Cars & Racing','Kids & Baby','For Business'] },
-        { label: '🎁 Gifts & occasions', tags: ["Father's Day",'Graduation','New Baby','Nurse & Healthcare','Gifts for Kids','Personalized Gifts'] },
+      // faceted browse: a top-level DEPARTMENT row narrows the store first, then
+      // search + multi-select tag groups refine within it. Multiple tags AND-filter.
+      const CHAR_TAGS = ['Pokémon','Kirby','Super Mario','Palworld','Digimon','SpongeBob','Sonic'];
+      const SPORT_TAGS = ['Sports','Soccer','Football','Basketball','Combat Sports'];
+      const hasAny = (p, set) => (p.tags || []).some(t => set.includes(t));
+      const DEPARTMENTS = [
+        { key: 'all',   label: 'All products' },
+        { key: 'char',  label: 'Characters & Fan Art', test: p => hasAny(p, CHAR_TAGS) },
+        { key: 'sport', label: 'Sports & Teams',        test: p => hasAny(p, SPORT_TAGS) },
+        { key: 'home',  label: 'Home, Gifts & Business', test: p => !hasAny(p, CHAR_TAGS) && !hasAny(p, SPORT_TAGS) },
       ];
-      const tagCount = {};
-      products.forEach(p => (p.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
+      // Tag groups per department (only the filters that make sense for that shopper).
+      const TYPE_TAGS = ['Figures & Models','Lamps & Lights','Controller Holders','Vases','Planters','Boxes & Containers','Organizers','Keychains','Piggy Banks','Puzzles','Fidgets','Toys & Games','Frames & Wall Art','Name Signs','Monograms','Trophies & Awards','Jerseys','NFC Stands','QR Stands'];
+      const groupsFor = (dept) => {
+        if (dept === 'char') return [
+          { label: 'Browse by character', tags: CHAR_TAGS },
+          { label: 'Browse by type', tags: ['Figures & Models','Lamps & Lights','Controller Holders','Boxes & Containers','Planters','Vases','Keychains','Puzzles','Fidgets'] },
+        ];
+        if (dept === 'sport') return [
+          { label: 'Browse by sport', tags: SPORT_TAGS },
+          { label: 'Browse by type', tags: ['Jerseys','Keychains','Frames & Wall Art','Lamps & Lights','Piggy Banks'] },
+        ];
+        if (dept === 'home') return [
+          { label: 'Browse by type', tags: ['NFC Stands','QR Stands','Name Signs','Monograms','Frames & Wall Art','Trophies & Awards','Organizers','Boxes & Containers','Vases','Planters','Piggy Banks','Keychains','Fidgets','Toys & Games','Cars & Racing'] },
+          { label: '🎁 Gifts & occasions', tags: ['Personalized Gifts','Gifts for Kids',"Father's Day",'New Baby','Graduation','Nurse & Healthcare','Kids & Baby'] },
+        ];
+        return [
+          { label: 'Browse by type', tags: TYPE_TAGS },
+          { label: 'Browse by theme', tags: [...CHAR_TAGS.filter(t=>t!=='Sonic'),...SPORT_TAGS,'Cars & Racing','Kids & Baby','For Business'] },
+          { label: '🎁 Gifts & occasions', tags: ['Personalized Gifts','Gifts for Kids',"Father's Day",'New Baby','Graduation','Nurse & Healthcare'] },
+        ];
+      };
+
+      let activeDept = 'all', searchQ = '';
       const active = new Set();
       const controls = document.createElement('div');
       controls.className = 'catalog-controls';
-      let html = '<input class="catalog-search" type="search" placeholder="Search all 700+ products…" aria-label="Search products">';
-      TAG_GROUPS.forEach(g => {
-        const avail = g.tags.filter(t => tagCount[t]);
-        if (!avail.length) return;
-        html += '<div class="filter-group"><span class="filter-label">' + g.label + '</span><div class="cat-filter">' +
-          avail.map(t => `<button class="cat-btn" data-tag="${escapeHtml(t)}">${escapeHtml(t)}<span class="cat-count">${tagCount[t]}</span></button>`).join('') +
-          '</div></div>';
-      });
-      html += '<button class="clear-filters" type="button" hidden>✕ Clear filters</button>';
-      controls.innerHTML = html;
       grid.parentNode.insertBefore(controls, grid);
 
-      const searchEl = controls.querySelector('.catalog-search');
-      const clearEl = controls.querySelector('.clear-filters');
+      const deptBase = () => { const d = DEPARTMENTS.find(x => x.key === activeDept); return (d && d.test) ? products.filter(d.test) : products; };
+
+      function renderControls() {
+        const base = deptBase();
+        const tagCount = {};
+        base.forEach(p => (p.tags || []).forEach(t => { tagCount[t] = (tagCount[t] || 0) + 1; }));
+        let html = '<div class="dept-filter">' + DEPARTMENTS.map(d => {
+          const n = d.test ? products.filter(d.test).length : products.length;
+          return `<button class="dept-btn${d.key === activeDept ? ' active' : ''}" data-dept="${d.key}">${escapeHtml(d.label)}<span class="cat-count">${n}</span></button>`;
+        }).join('') + '</div>';
+        html += `<input class="catalog-search" type="search" placeholder="Search ${base.length} products…" aria-label="Search products" value="${escapeHtml(searchQ)}">`;
+        groupsFor(activeDept).forEach(g => {
+          const avail = g.tags.filter(t => tagCount[t]);
+          if (!avail.length) return;
+          html += '<div class="filter-group"><span class="filter-label">' + g.label + '</span><div class="cat-filter">' +
+            avail.map(t => `<button class="cat-btn${active.has(t) ? ' active' : ''}" data-tag="${escapeHtml(t)}">${escapeHtml(t)}<span class="cat-count">${tagCount[t]}</span></button>`).join('') +
+            '</div></div>';
+        });
+        html += `<button class="clear-filters" type="button"${(active.size || searchQ) ? '' : ' hidden'}>✕ Clear filters</button>`;
+        controls.innerHTML = html;
+      }
+
       function applyFilter() {
-        const q = (searchEl.value || '').trim().toLowerCase();
-        let list = products;
+        let list = deptBase();
         if (active.size) list = list.filter(p => { const ts = new Set(p.tags || []); for (const t of active) if (!ts.has(t)) return false; return true; });
+        const q = searchQ.trim().toLowerCase();
         if (q) list = list.filter(p => (p.name || '').toLowerCase().includes(q) || (p.tags || []).join(' ').toLowerCase().includes(q));
-        clearEl.hidden = active.size === 0 && !q;
+        const cl = controls.querySelector('.clear-filters'); if (cl) cl.hidden = !(active.size || searchQ);
         grid.innerHTML = list.length ? list.map(card).join('') : '<div class="catalog-noresults">No products match — try fewer filters or a different search.</div>';
       }
+
       controls.addEventListener('click', e => {
-        const b = e.target.closest('.cat-btn'); if (!b) return;
-        const t = b.dataset.tag;
-        if (active.has(t)) { active.delete(t); b.classList.remove('active'); }
-        else { active.add(t); b.classList.add('active'); }
-        applyFilter();
+        const dept = e.target.closest('.dept-btn');
+        if (dept) { activeDept = dept.dataset.dept; active.clear(); renderControls(); applyFilter(); return; }
+        const b = e.target.closest('.cat-btn');
+        if (b) {
+          const t = b.dataset.tag;
+          if (active.has(t)) { active.delete(t); b.classList.remove('active'); }
+          else { active.add(t); b.classList.add('active'); }
+          applyFilter(); return;
+        }
+        const clr = e.target.closest('.clear-filters');
+        if (clr) { active.clear(); searchQ = ''; renderControls(); applyFilter(); return; }
       });
-      clearEl.addEventListener('click', () => {
-        active.clear(); searchEl.value = '';
-        controls.querySelectorAll('.cat-btn.active').forEach(x => x.classList.remove('active'));
-        applyFilter();
+      controls.addEventListener('input', e => {
+        if (e.target.classList.contains('catalog-search')) { searchQ = e.target.value; applyFilter(); }
       });
-      searchEl.addEventListener('input', applyFilter);
+
+      renderControls();
       applyFilter();
 
       if (meta) {
