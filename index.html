@@ -706,6 +706,13 @@
         if (tags.has('Personalized Gifts') || tags.has('Trophies & Awards')) return 'gift';
         return 'stock';
       }
+      // shipping size tier (mirrors the checkout service)
+      function shipOf(p) {
+        const tags = new Set(p.tags || []);
+        if (['Keychains','Charms & Tags','Monograms','Bookmarks','Cookie Cutters'].some(t => tags.has(t))) return 'small';
+        if (tags.has('Lamps & Lights')) return 'large';
+        return 'standard';
+      }
       function card(p) {
         const imgHtml = p.image_url
           ? `<div class="product-card-img"><img src="${p.image_url}" alt="${escapeHtml(p.name || '')}" loading="lazy"></div>`
@@ -724,7 +731,7 @@
         const mailto = 'mailto:ace3dprintingco@gmail.com?subject=' + encodeURIComponent('Order: ' + (p.name || '')) + '&body=' + encodeURIComponent('Hi! I would like to order: ' + (p.name || '') + '\n\nPersonalization (name/text): \nColor preference: \n');
         // On-page checkout when a Stripe price exists; otherwise Etsy / payment link / inquire.
         const cta = p.stripe_price_id
-          ? `<button class="product-cta" data-price="${escapeHtml(p.stripe_price_id)}" data-pmode="${pmodeOf(p)}" data-name="${escapeHtml(p.name || '')}">Order now</button>`
+          ? `<button class="product-cta" data-price="${escapeHtml(p.stripe_price_id)}" data-pmode="${pmodeOf(p)}" data-ship="${shipOf(p)}" data-name="${escapeHtml(p.name || '')}">Order now</button>`
           : `<a class="product-cta" href="${p.etsy_url || p.website_url || mailto}"${(p.etsy_url || p.website_url) ? ' target="_blank" rel="noopener"' : ''}>${p.etsy_url ? 'Buy on Etsy ↗' : (p.website_url ? 'Order now ↗' : 'Inquire to order')}</a>`;
         return `
           <article class="product-card">
@@ -891,14 +898,14 @@
     const close = () => { ov.classList.remove('open'); document.body.style.overflow=''; if (checkout){ try{ checkout.destroy(); }catch(e){} checkout=null; } };
     ov.querySelector('#co-close').addEventListener('click', close);
     ov.addEventListener('click', e => { if (e.target === ov) close(); });
-    async function openCheckout(price, profile) {
+    async function openCheckout(price, profile, ship) {
       if (!window.Stripe) return;
       if (!stripe) stripe = Stripe(PK);
       ov.querySelector('#co-mount').innerHTML = '<div style="padding:2rem;font-family:monospace;color:#666;font-size:.8rem">Loading secure checkout…</div>';
       ov.classList.add('open'); document.body.style.overflow='hidden';
       try {
         checkout = await stripe.initEmbeddedCheckout({
-          fetchClientSecret: () => fetch('/api/checkout/create-session', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ price, profile }) })
+          fetchClientSecret: () => fetch('/api/checkout/create-session', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ price, profile, ship }) })
             .then(r => r.json()).then(d => { if (!d.clientSecret) throw new Error(d.error || 'no secret'); return d.clientSecret; })
         });
         ov.querySelector('#co-mount').innerHTML = '';
@@ -911,7 +918,7 @@
       const b = e.target.closest('.product-cta[data-price]');
       if (!b) return;
       e.preventDefault();
-      openCheckout(b.dataset.price, b.dataset.pmode || 'stock');
+      openCheckout(b.dataset.price, b.dataset.pmode || 'stock', b.dataset.ship || 'standard');
     });
     if (new URLSearchParams(location.search).get('checkout') === 'complete') {
       const t = document.createElement('div');
